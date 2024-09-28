@@ -236,3 +236,14 @@ VALUES   (
     'White',
     5
   );
+
+-- Assignment 2 - Query 4 - replacing the small interiors to huge interiors in the Hummer
+UPDATE public.inventory
+SET inv_description = REPLACE(inv_description, 'small interiors','a huge interior')
+WHERE inv_id = 10;
+
+-- Assignment 2 - Query 6 - changing the path for image and the thumbnail for the inventory vehicles
+UPDATE public.inventory
+SET
+inv_image = REPLACE(inv_image,'/images','/images/vehicles'),
+inv_thumbnail = REPLACE(inv_thumbnail,'/images','/images/vehicles');
