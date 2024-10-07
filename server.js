@@ -14,6 +14,7 @@ const app = express();
 const static = require('./routes/static');
 const baseController = require('./controllers/baseController');
 const inventoryRoute = require('./routes/inventoryRoute');
+const intentionalErrorRoute = require('./routes/intentionalErrorRoute');
 
 /* ***********************
  * View Engine and Templates
@@ -31,6 +32,9 @@ app.use(static);
 app.get('/', utilities.handleErrors(baseController.buildHome));
 // Inventory routes
 app.use('/inv', utilities.handleErrors(inventoryRoute));
+// Intentional error
+app.use('/interror', utilities.handleErrors(intentionalErrorRoute));
+
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
   next({

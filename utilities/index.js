@@ -59,7 +59,6 @@ Util.buildClassificationGrid = async function (data) {
  ************************** */
 Util.getNav = async function (req, res, next) {
   let data = await invModel.getClassifications();
-  console.log(data);
   let list = '<ul>';
   list += '<li><a href="/" title="Home page">Home</a></li>';
   data.rows.forEach((row) => {
@@ -76,6 +75,36 @@ Util.getNav = async function (req, res, next) {
   });
   list += '</ul>';
   return list;
+};
+
+/**
+ *
+ */
+Util.buildItemDetailGrid = async function (data) {
+  let grid = '';
+  if (data.length > 0) {
+    grid += `<h3 class="detail-price">$${new Intl.NumberFormat('en-US').format(
+      Number(data[0].inv_price)
+    )}</h3>
+            <div class="details">
+              <img class="car-image" src="${data[0].inv_image}" alt="image of ${
+      data[0].inv_make
+    } ${data.inv_model} on CSE Motors" />
+              <div class="car-info">
+                <p>Make: ${data[0].inv_make}</p>
+                <p>Model: ${data[0].inv_model}</p>
+                <p>Year: ${data[0].inv_year}</p>
+                <p>Miles: ${new Intl.NumberFormat('en-US').format(
+                  data[0].inv_miles
+                )}</p>
+                <p>Color: ${data[0].inv_color}</p>
+                <p class="description">${data[0].inv_description}</p>
+              </div>
+            </div>`;
+  } else {
+    grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>';
+  }
+  return grid;
 };
 
 /* ****************************************

@@ -7,7 +7,7 @@ body {
 /* Header  */
 #wrapper {
   background-color: white;
-  margin: 1em 3em;
+  margin: 5px;
   padding: 2%;
 }
 
@@ -39,12 +39,6 @@ body {
 }
 
 /* NAVIGATION BAR */
-#menu {
-  background-color: black;
-  border: none;
-  color: white;
-  font-size: 1.5rem;
-}
 
 nav {
   background-color: black;
@@ -56,23 +50,35 @@ nav {
 nav ul {
   list-style-type: none;
   margin: 0;
+  padding: 0;
   display: flex;
-  justify-content: space-evenly;
-  width: 100%;
+  justify-content: space-between;
 }
 
 nav ul li {
   padding: 0.8rem;
+  margin: 0;
   text-align: center;
   flex-basis: auto;
-  font-size: 1.5rem;
 }
-nav ul li:hover {
+/* nav ul li:hover {
   background-color: white;
   color: black;
   cursor: pointer;
+} */
+/* removing the underline from the navigation bar */
+nav a {
+  text-decoration: none;
+  font-size: 3vw;
+  color: white;
+  height: 100%;
+  width: auto;
 }
 
+nav a:hover {
+  background-color: white;
+  color: black;
+}
 /* BODY */
 
 #hero {
@@ -191,4 +197,60 @@ nav ul li:hover {
   color: white;
   cursor: pointer;
   border-radius: 10%;
+}
+
+/* Product listings  */
+#inv-display {
+  margin: 0;
+  padding: 0;
+}
+
+#inv-display li {
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+  margin-bottom: 3em;
+  justify-content: space-between;
+  border-bottom: 2px solid gray;
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
+  padding-top: 1.5em;
+  padding-bottom: 1.5em;
+}
+
+#inv-display li a img {
+  border-radius: 1rem;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.namePrice hr {
+  display: none;
+}
+
+.namePrice h2 {
+  padding: 0;
+  margin: 0;
+  margin-top: 5px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  text-align: right;
+}
+.namePrice span {
+  float: right;
+  margin-right: 5px;
+}
+
+/* Car details */
+
+.car-image {
+  width: 95%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border: 5px solid black;
+}
+
+.car-info {
+  margin-left: 2.5%;
 }

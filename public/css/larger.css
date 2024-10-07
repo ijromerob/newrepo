@@ -29,4 +29,33 @@
   #hero-txtbox {
     right: 50%;
   }
+
+  nav a {
+    font-size: 1.5em;
+  }
+
+  /* Product listings  */
+
+  .namePrice span {
+    margin-right: 1rem;
+  }
+  .namePrice h2 {
+    margin-right: 1rem;
+  }
+  /* car details */
+  h1,
+  h3 {
+    text-align: right;
+    margin-right: 1.5rem;
+  }
+  .details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .car-image {
+    width: auto;
+  }
+  .car-info {
+    padding: 1.5rem;
+  }
 }
