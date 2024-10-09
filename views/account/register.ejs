@@ -1,0 +1,19 @@
+<% if (title) { %>
+<h1><%= title %></h1>
+<% } else { res.redirect('/') } %> <%- messages() %>
+<div class="form-shape">
+  <form action="submit">
+    <label>First Name<input type="text" required /></label>
+    <label>Last Name<input type="text" required /></label>
+    <label>Email Address<input type="email" required /></label>
+    <label
+      >Password<input
+        type="password"
+        required
+        minlength="12"
+        pattern="(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}"
+        title="Password must contain at least one uppercase letter, one number, one special character, and be at least 12 characters long."
+    /></label>
+    <button type="submit">Register</button>
+  </form>
+</div>
