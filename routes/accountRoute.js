@@ -6,10 +6,15 @@ const accountController = require('../controllers/accountController');
 
 // login route
 router.get('/login', utilities.handleErrors(accountController.buildLogin));
-
+// registration route
 router.get(
   '/register',
   utilities.handleErrors(accountController.registerIndividual)
+);
+// registration route - a client entering information
+router.post(
+  '/register',
+  utilities.handleErrors(accountController.registerAccount)
 );
 
 module.exports = router;
