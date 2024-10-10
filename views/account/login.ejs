@@ -1,10 +1,23 @@
 <% if (title) { %>
 <h1><%= title %></h1>
-<% } else { res.redirect('/') } %> <%- messages() %>
+<% } else { res.redirect('/') } %> <%- messages() %> <% if (errors) { %>
+<ul class="notice">
+  <% errors.array().forEach(error => { %>
+  <li><%= error.msg %></li>
+  <% }) %>
+</ul>
+<% } %>
 
 <div class="form-shape">
-  <form action="submit">
-    <label>Email: <input type="email" name="account_email" required /></label>
+  <form action="/account/login" method="post" id="loginForm">
+    <label
+      >Email:
+      <input
+        type="email"
+        name="account_email"
+        required
+        value="<%= locals.account_email %>"
+    /></label>
     <label
       >Password: <input type="password" name="account_password" required
     /></label>
