@@ -19,6 +19,7 @@ async function registerIndividual(req, res, next) {
   res.render('account/register', {
     title: 'Register',
     nav,
+    errors: null,
   });
 }
 

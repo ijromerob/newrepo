@@ -58,4 +58,12 @@
   .car-info {
     padding: 1.5rem;
   }
+  /* Form changes in large view */
+  .form-shape label {
+    margin: 1.5rem;
+  }
+
+  .form-shape form {
+    width: 65%;
+  }
 }
