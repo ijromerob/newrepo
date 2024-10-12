@@ -16,4 +16,7 @@ router.get(
   utilities.handleErrors(invController.buildByInventoryId)
 );
 
+// management view
+router.get('/', utilities.handleErrors(invController.buildInventoryManager));
+
 module.exports = router;
