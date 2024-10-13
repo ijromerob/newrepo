@@ -319,3 +319,18 @@ nav a:hover {
   margin-bottom: 2em;
   color: black;
 }
+
+.add-inventory textarea {
+  width: 13em;
+  margin-top: 1em;
+  padding: 0.3em;
+  border-radius: 8px;
+  display: block;
+}
+
+.add-inventory select {
+  display: block;
+  margin-top: 1em;
+  padding: 0.3em;
+  border-radius: 8px;
+}

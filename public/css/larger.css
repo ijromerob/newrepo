@@ -70,4 +70,22 @@
   .inv-menu {
     width: 20%;
   }
+
+  .add-inventory label {
+    margin: 0;
+    margin-top: 0.7rem;
+  }
+  .add-inventory input,
+  .add-inventory textarea,
+  .add-inventory select {
+    width: 84%;
+  }
+  .add-inventory form {
+    margin: 0;
+    margin-left: 1.5rem;
+    width: 100%;
+  }
+  .add-inventory button {
+    margin-top: 0.7rem;
+  }
 }
