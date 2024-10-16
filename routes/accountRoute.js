@@ -13,6 +13,14 @@ router.get(
   '/register',
   utilities.handleErrors(accountController.registerIndividual) //build login
 );
+
+// Default account view
+router.get(
+  '/',
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildDefaultAccount)
+);
+
 // registration route - a client entering information
 router.post(
   '/register',
@@ -26,9 +34,7 @@ router.post(
   '/login',
   regValidate.loginRules(),
   regValidate.checkLoginData,
-  (req, res) => {
-    res.status(200).send('login process');
-  }
+  utilities.handleErrors(accountController.accountLogin)
 );
 
 module.exports = router;
