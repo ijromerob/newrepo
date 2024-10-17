@@ -143,6 +143,20 @@ async function updateInventory(
     return error.message;
   }
 }
+
+/**
+ * This function will delete a record from the inventory id
+ */
+async function deleteFromInventory(inv_id) {
+  try {
+    const sql = 'DELETE FROM public.inventory WHERE inv_id =$1';
+    const data = await pool.query(sql, [inv_id]);
+    return data;
+  } catch (error) {
+    return error.message;
+  }
+}
+
 module.exports = {
   getClassifications,
   getInventoryByClassificationId,
@@ -151,4 +165,5 @@ module.exports = {
   AddClassificationDB,
   addCarInventory,
   updateInventory,
+  deleteFromInventory,
 };
