@@ -47,5 +47,24 @@ router.post(
   invenValidate.checkInvenData,
   utilities.handleErrors(invController.addInventory)
 );
+// this route supplies the query for cars with a certain classification
+router.get(
+  '/getInventory/:classification_id',
+  utilities.handleErrors(invController.getInventoryJSON)
+);
+
+// This route builds a view specific for a car based on the car id
+router.get(
+  '/edit/:inventory_id',
+  utilities.handleErrors(invController.buildInventoryEditView)
+);
+
+// Route that handles the update of an item in the inventory
+router.post(
+  '/update/',
+  invenValidate.inventoryRules(),
+  invenValidate.checkUpdateData,
+  utilities.handleErrors(invController.updateInventory)
+);
 
 module.exports = router;

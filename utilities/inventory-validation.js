@@ -111,4 +111,47 @@ validate.checkInvenData = async (req, res, next) => {
   next();
 };
 
+// Checks for the inventory data that already exists
+// errors will now be directed to the edit-inventory view
+validate.checkUpdateData = async (req, res, next) => {
+  const {
+    classification_id,
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_miles,
+    inv_color,
+    inv_id,
+  } = req.body;
+  let errors = [];
+  errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    let selection = await utilities.getClassificationOptions(classification_id);
+    const invDataName = `${inv_make} ${inv_model}`;
+    res.render('inventory/edit-inventory', {
+      errors,
+      title: 'Edit' + invDataName,
+      nav,
+      classificationSelect: selection,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_miles,
+      inv_color,
+      inv_id,
+    });
+    return;
+  }
+  next();
+};
+
 module.exports = validate;

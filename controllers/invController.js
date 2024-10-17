@@ -43,9 +43,11 @@ invCont.buildByInventoryId = async function (req, res, next) {
 
 invCont.buildInventoryManager = async function (req, res, next) {
   let nav = await utilities.getNav();
+  const classificationSelect = await utilities.getClassificationOptions();
   res.render('./inventory/management', {
     title: 'Inventory Management',
     nav,
+    classificationSelect,
     errors: null,
   });
 };
@@ -68,6 +70,7 @@ invCont.buildClassificationView = async function (req, res, next) {
  */
 invCont.addClassification = async function (req, res) {
   const { classification_name } = req.body;
+  const classificationSelect = await utilities.getClassificationOptions();
   let nav;
   const classificationAddResult = await invModel.AddClassificationDB(
     classification_name
@@ -82,6 +85,7 @@ invCont.addClassification = async function (req, res) {
     res.status(201).render('inventory/management', {
       title: 'Inventory Management',
       nav,
+      classificationSelect,
       errors: null,
     });
   } else {
@@ -113,6 +117,7 @@ invCont.buildAddInventoryView = async function (req, res, next) {
  */
 invCont.addInventory = async function (req, res) {
   let nav = await utilities.getNav();
+  const classificationSelect = await utilities.getClassificationOptions();
   const {
     classification_id,
     inv_make,
@@ -147,6 +152,7 @@ invCont.addInventory = async function (req, res) {
     res.status(201).render('inventory/management', {
       title: 'Inventory Management',
       nav,
+      classificationSelect,
       errors: null,
     });
   } else {
@@ -157,6 +163,116 @@ invCont.addInventory = async function (req, res) {
       nav,
       selection,
       errors: null,
+    });
+  }
+};
+
+/* ***************************
+ *  Return Inventory by Classification As JSON
+ * ************************** */
+invCont.getInventoryJSON = async (req, res, next) => {
+  const classification_id = parseInt(req.params.classification_id);
+  const invData = await invModel.getInventoryByClassificationId(
+    classification_id
+  );
+  if (invData[0].inv_id) {
+    return res.json(invData);
+  } else {
+    next(new Error('No data returned'));
+  }
+};
+
+/**
+ * This builds the edit inventory view
+ */
+
+invCont.buildInventoryEditView = async function (req, res, next) {
+  let nav = await utilities.getNav();
+  const inv_id = parseInt(req.params.inventory_id);
+  const itemData = await invModel.getDetailByInventoryId(inv_id);
+  let classificationSelect = await utilities.getClassificationOptions(
+    itemData[0].classification_id
+  );
+  const itemName = `${itemData[0].inv_make} ${itemData[0].inv_model}`;
+  res.render('./inventory/edit-inventory', {
+    title: 'Edit' + itemName,
+    nav,
+    classificationSelect: classificationSelect,
+    errors: null,
+    inv_id: itemData[0].inv_id,
+    inv_make: itemData[0].inv_make,
+    inv_model: itemData[0].inv_model,
+    inv_year: itemData[0].inv_year,
+    inv_description: itemData[0].inv_description,
+    inv_image: itemData[0].inv_image,
+    inv_thumbnail: itemData[0].inv_thumbnail,
+    inv_price: itemData[0].inv_price,
+    inv_miles: itemData[0].inv_miles,
+    inv_color: itemData[0].inv_color,
+    classification_id: itemData[0].classification_id,
+  });
+};
+
+/**
+ * Updates an inventory item
+ */
+invCont.updateInventory = async function (req, res) {
+  let nav = await utilities.getNav();
+
+  const {
+    classification_id,
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_miles,
+    inv_color,
+    inv_id,
+  } = req.body;
+
+  const updateResult = await invModel.updateInventory(
+    inv_id,
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_miles,
+    inv_color,
+    classification_id
+  );
+
+  if (updateResult) {
+    const itemName = updateResult.inv_make + ' ' + updateResult.inv_model;
+    req.flash('notice', `The ${itemName} has been successfully updated.`);
+    res.redirect('/inv/');
+  } else {
+    const classificationSelect = await utilities.getClassificationOptions(
+      classification_id
+    );
+    const itemName = `${inv_make} ${inv_model}`;
+    req.flash('notice', 'Sorry the the insert failed');
+    res.status(501).render('inventory/edit-inventory', {
+      title: 'Edit ' + itemName,
+      nav,
+      classificationSelect,
+      errors: null,
+      inv_id,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_miles,
+      inv_color,
+      classification_id,
     });
   }
 };
