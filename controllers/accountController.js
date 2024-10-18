@@ -10,8 +10,10 @@ require('dotenv').config();
  * *************************************** */
 async function buildLogin(req, res, next) {
   let nav = await utilities.getNav();
+  let welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
   res.render('account/login', {
     title: 'Login',
+    welcomeAccount,
     nav,
     errors: null,
   });
@@ -22,9 +24,11 @@ async function buildLogin(req, res, next) {
  ****************************/
 async function buildDefaultAccount(req, res, next) {
   let nav = await utilities.getNav();
+  let welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
   req.flash('notice', `You have successfully logged in!`);
   res.render('account/default', {
     title: 'Welcome',
+    welcomeAccount,
     nav,
     errors: null,
   });
@@ -35,8 +39,10 @@ async function buildDefaultAccount(req, res, next) {
  * *************************************** */
 async function registerIndividual(req, res, next) {
   let nav = await utilities.getNav();
+  let welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
   res.render('account/register', {
     title: 'Register',
+    welcomeAccount,
     nav,
     errors: null,
   });
@@ -47,6 +53,7 @@ async function registerIndividual(req, res, next) {
  * *************************************** */
 async function registerAccount(req, res) {
   let nav = await utilities.getNav();
+  let welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
   const {
     account_firstname,
     account_lastname,
@@ -66,6 +73,7 @@ async function registerAccount(req, res) {
     );
     res.status(500).render('account/register', {
       title: 'Registration',
+      welcomeAccount,
       nav,
       errors: null,
     });
@@ -85,6 +93,7 @@ async function registerAccount(req, res) {
     );
     res.status(201).render('account/login', {
       title: 'Login',
+      welcomeAccount,
       nav,
       errors: null,
     });
@@ -92,6 +101,7 @@ async function registerAccount(req, res) {
     req.flash('notice', 'Sorry, the registration failed.');
     res.status(501).render('account/register', {
       title: 'Registration',
+      welcomeAccount,
       nav,
       errors: null,
     });
@@ -103,12 +113,14 @@ async function registerAccount(req, res) {
  * ************************************ */
 async function accountLogin(req, res) {
   let nav = await utilities.getNav();
+  let welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
   const { account_email, account_password } = req.body;
   const accountData = await accountModel.getAccountByEmail(account_email);
   if (!accountData) {
     req.flash('notice', 'Please check your credentials and try again.');
     res.status(400).render('account/login', {
       title: 'Login',
+      welcomeAccount,
       nav,
       errors: null,
       account_email,

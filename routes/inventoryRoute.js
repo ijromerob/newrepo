@@ -19,7 +19,11 @@ router.get(
 );
 
 // management view
-router.get('/', utilities.handleErrors(invController.buildInventoryManager));
+router.get(
+  '/',
+  utilities.checkLogin,
+  utilities.handleErrors(invController.buildInventoryManager)
+);
 
 // Route to build add-classification view
 router.get(

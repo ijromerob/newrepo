@@ -13,9 +13,11 @@ invCont.buildByClassificationId = async function (req, res, next) {
   const data = await invModel.getInventoryByClassificationId(classification_id);
   const grid = await utilities.buildClassificationGrid(data);
   let nav = await utilities.getNav();
+  const welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
   const className = data[0].classification_name;
   res.render('./inventory/classification', {
     title: className + ' vehicles',
+    welcomeAccount,
     nav,
     grid,
   });
@@ -29,9 +31,11 @@ invCont.buildByInventoryId = async function (req, res, next) {
   const data = await invModel.getDetailByInventoryId(inv_id);
   const grid = await utilities.buildItemDetailGrid(data);
   let nav = await utilities.getNav();
+  const welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
 
   res.render('./inventory/detail', {
     title: data[0].inv_make + ' ' + data[0].inv_model + ' ' + data[0].inv_year,
+    welcomeAccount,
     nav,
     grid,
   });
@@ -43,9 +47,11 @@ invCont.buildByInventoryId = async function (req, res, next) {
 
 invCont.buildInventoryManager = async function (req, res, next) {
   let nav = await utilities.getNav();
+  const welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
   const classificationSelect = await utilities.getClassificationOptions();
   res.render('./inventory/management', {
     title: 'Inventory Management',
+    welcomeAccount,
     nav,
     classificationSelect,
     errors: null,
@@ -58,8 +64,10 @@ invCont.buildInventoryManager = async function (req, res, next) {
 
 invCont.buildClassificationView = async function (req, res, next) {
   let nav = await utilities.getNav();
+  const welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
   res.render('./inventory/add-classification', {
     title: 'Add Classification',
+    welcomeAccount,
     nav,
     errors: null,
   });
@@ -72,6 +80,7 @@ invCont.addClassification = async function (req, res) {
   const { classification_name } = req.body;
   const classificationSelect = await utilities.getClassificationOptions();
   let nav;
+  const welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
   const classificationAddResult = await invModel.AddClassificationDB(
     classification_name
   );
@@ -84,6 +93,7 @@ invCont.addClassification = async function (req, res) {
     );
     res.status(201).render('inventory/management', {
       title: 'Inventory Management',
+      welcomeAccount,
       nav,
       classificationSelect,
       errors: null,
@@ -93,6 +103,7 @@ invCont.addClassification = async function (req, res) {
     req.flash('notice', "Sorry the classification wasn't added to the server");
     res.status(501).render('inventory/add-classification', {
       title: 'Add Classification',
+      welcomeAccount,
       nav,
       errors: null,
     });
@@ -103,9 +114,11 @@ invCont.addClassification = async function (req, res) {
  */
 invCont.buildAddInventoryView = async function (req, res, next) {
   let nav = await utilities.getNav();
+  const welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
   let selection = await utilities.getClassificationOptions();
   res.render('./inventory/add-inventory', {
     title: 'Add To The Inventory',
+    welcomeAccount,
     nav,
     selection,
     errors: null,
@@ -117,6 +130,7 @@ invCont.buildAddInventoryView = async function (req, res, next) {
  */
 invCont.addInventory = async function (req, res) {
   let nav = await utilities.getNav();
+  const welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
   const classificationSelect = await utilities.getClassificationOptions();
   const {
     classification_id,
@@ -151,6 +165,7 @@ invCont.addInventory = async function (req, res) {
     );
     res.status(201).render('inventory/management', {
       title: 'Inventory Management',
+      welcomeAccount,
       nav,
       classificationSelect,
       errors: null,
@@ -160,6 +175,7 @@ invCont.addInventory = async function (req, res) {
     req.flash('notice', "Sorry the car wasn't added to the inventory");
     res.status(501).render('inventory/add-inventory', {
       title: 'Add Inventory',
+      welcomeAccount,
       nav,
       selection,
       errors: null,
@@ -188,6 +204,7 @@ invCont.getInventoryJSON = async (req, res, next) => {
 
 invCont.buildInventoryEditView = async function (req, res, next) {
   let nav = await utilities.getNav();
+  const welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
   const inv_id = parseInt(req.params.inventory_id);
   const itemData = await invModel.getDetailByInventoryId(inv_id);
   let classificationSelect = await utilities.getClassificationOptions(
@@ -196,6 +213,7 @@ invCont.buildInventoryEditView = async function (req, res, next) {
   const itemName = `${itemData[0].inv_make} ${itemData[0].inv_model}`;
   res.render('./inventory/edit-inventory', {
     title: 'Edit ' + itemName,
+    welcomeAccount,
     nav,
     classificationSelect: classificationSelect,
     errors: null,
@@ -218,6 +236,7 @@ invCont.buildInventoryEditView = async function (req, res, next) {
  */
 invCont.updateInventory = async function (req, res) {
   let nav = await utilities.getNav();
+  const welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
 
   const {
     classification_id,
@@ -259,6 +278,7 @@ invCont.updateInventory = async function (req, res) {
     req.flash('notice', 'Sorry the the insert failed');
     res.status(501).render('inventory/edit-inventory', {
       title: 'Edit ' + itemName,
+      welcomeAccount,
       nav,
       classificationSelect,
       errors: null,
@@ -282,12 +302,14 @@ invCont.updateInventory = async function (req, res) {
  */
 invCont.buildDeleteView = async function (req, res, next) {
   let nav = await utilities.getNav();
+  const welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
   const inventory_id = parseInt(req.params.inventory_id);
   const itemData = await invModel.getDetailByInventoryId(inventory_id);
   const { inv_id, inv_make, inv_model, inv_year, inv_price } = itemData[0];
   const itemName = `${itemData[0].inv_make} ${itemData[0].inv_model}`;
   res.render('./inventory/delete-confirm', {
     title: 'Delete ' + itemName,
+    welcomeAccount,
     nav,
     errors: null,
     inv_id,
@@ -303,6 +325,7 @@ invCont.buildDeleteView = async function (req, res, next) {
  */
 invCont.deleteInventory = async function (req, res) {
   let nav = await utilities.getNav();
+  const welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
   const { inv_make, inv_model, inv_year, inv_price, inv_id } = req.body;
   const updateResult = await invModel.deleteFromInventory(inv_id);
 
@@ -315,6 +338,7 @@ invCont.deleteInventory = async function (req, res) {
     req.flash('notice', 'Sorry the the delete failed');
     res.status(501).render('inventory/delete-confirm', {
       title: 'Delete ' + itemName,
+      welcomeAccount,
       nav,
       errors: null,
       inv_id,

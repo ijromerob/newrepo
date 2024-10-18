@@ -90,10 +90,12 @@ validate.checkInvenData = async (req, res, next) => {
   errors = validationResult(req);
   if (!errors.isEmpty()) {
     let nav = await utilities.getNav();
+    let welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
     let selection = await utilities.getClassificationOptions(classification_id);
     res.render('inventory/add-inventory', {
       errors,
       title: 'Add Inventory',
+      welcomeAccount,
       nav,
       selection,
       inv_make,
@@ -131,11 +133,13 @@ validate.checkUpdateData = async (req, res, next) => {
   errors = validationResult(req);
   if (!errors.isEmpty()) {
     let nav = await utilities.getNav();
+    let welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
     let selection = await utilities.getClassificationOptions(classification_id);
     const invDataName = `${inv_make} ${inv_model}`;
     res.render('inventory/edit-inventory', {
       errors,
       title: 'Edit' + invDataName,
+      welcomeAccount,
       nav,
       classificationSelect: selection,
       inv_make,

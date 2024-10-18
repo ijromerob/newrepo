@@ -3,7 +3,8 @@ const baseController = {};
 
 baseController.buildHome = async function (req, res) {
   const nav = await utilities.getNav();
-  res.render('index', { title: 'Home', nav });
+  const welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
+  res.render('index', { title: 'Home', welcomeAccount, nav });
 };
 
 module.exports = baseController;

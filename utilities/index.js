@@ -161,9 +161,9 @@ Util.checkJWTToken = (req, res, next) => {
   }
 };
 
-/* ****************************************
- *  Check Login
- * ************************************ */
+/* **********************************************************
+ *  Check Login - prevents the render of unauthorized content
+ * ******************************************************* */
 Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
     next();
@@ -171,6 +171,34 @@ Util.checkLogin = (req, res, next) => {
     req.flash('notice', 'Please log in.');
     return res.redirect('/account/login');
   }
+};
+
+/************************************************
+ * Checks login to decide what to load for header
+ ***********************************************/
+Util.checkLoginWelcomeAccount = async (res) => {
+  if (res.locals.loggedin) {
+    return Util.getLogOut();
+  } else {
+    return Util.getMyAccount();
+  }
+};
+
+/**
+ * This function will return the log out and welcome
+ */
+Util.getLogOut = () => {
+  let logOut = '<p>Welcome | <a href="/account/logout">Logout</a></p>';
+  return logOut;
+};
+
+/**
+ * This function will return the my account regular view
+ */
+Util.getMyAccount = () => {
+  let myAccount =
+    '<a title="Click to log in" href="/account/login">My Account</a>';
+  return myAccount;
 };
 
 module.exports = Util;
