@@ -22,6 +22,7 @@ router.get(
 router.get(
   '/',
   utilities.checkLogin,
+  utilities.checkAdministrativeLogin,
   utilities.handleErrors(invController.buildInventoryManager)
 );
 

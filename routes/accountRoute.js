@@ -37,4 +37,34 @@ router.post(
   utilities.handleErrors(accountController.accountLogin)
 );
 
+/**
+ * This route builds the edit view
+ */
+router.get(
+  '/edit',
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildAccountEdit)
+);
+
+/**
+ * This route posts the changes in the account information (but not the password)
+ */
+router.post(
+  '/edit',
+  regValidate.infoRules(),
+  regValidate.checkInfo,
+  utilities.handleErrors(accountController.editInfo)
+);
+
+/**
+ * This route post changes uniquely to the password
+ */
+router.post(
+  '/editpw',
+  regValidate.passwordRules(),
+  regValidate.checkPassword,
+  utilities.handleErrors(accountController.editPassword)
+);
+
+router.get('/logout', utilities.handleErrors(accountController.logout));
 module.exports = router;

@@ -178,7 +178,7 @@ Util.checkLogin = (req, res, next) => {
  ***********************************************/
 Util.checkLoginWelcomeAccount = async (res) => {
   if (res.locals.loggedin) {
-    return Util.getLogOut();
+    return Util.getLogOut(res.locals);
   } else {
     return Util.getMyAccount();
   }
@@ -187,8 +187,8 @@ Util.checkLoginWelcomeAccount = async (res) => {
 /**
  * This function will return the log out and welcome
  */
-Util.getLogOut = () => {
-  let logOut = '<p>Welcome | <a href="/account/logout">Logout</a></p>';
+Util.getLogOut = (locals) => {
+  let logOut = `<p>Welcome <a href="/account/">${locals.accountData.account_firstname}</a> | <a href="/account/logout">Logout</a></p>`;
   return logOut;
 };
 
@@ -201,4 +201,52 @@ Util.getMyAccount = () => {
   return myAccount;
 };
 
+/*************************************************************************************
+ * This function prevents the different accounts from entering into managerial content
+ *************************************************************************************/
+Util.checkAdministrativeLogin = (req, res, next) => {
+  if (
+    res.locals.accountData.account_type == 'Employee' ||
+    res.locals.accountData.account_type == 'Admin'
+  ) {
+    next();
+  } else {
+    req.flash('notice', 'You do not possess administrative access!');
+    return res.redirect('/');
+  }
+};
+
+/**
+ * This function returns a link to edit the client's account
+ */
+Util.buildEditAccountInfo = (res) => {
+  let editInfo = '<a href="/account/edit/">Edit Account Information</a>';
+  return editInfo;
+};
+
+/**
+ * This function returns a build inventory management section
+ */
+Util.buildInventoryManagement = (res) => {
+  let inventoryManagement = '';
+  inventoryManagement +=
+    '<div><h3>Inventory Management</h3><a href="/inv/">Manage Inventory</a></div>';
+  return inventoryManagement;
+};
+
+/**
+ * this higher order function provides the way to render depending on the client
+ */
+Util.renderAdmisnistrativeClient = (res, firstCallBack, secondCallback) => {
+  if (
+    res.locals.accountData.account_type == 'Employee' ||
+    res.locals.accountData.account_type == 'Admin'
+  ) {
+    let template = firstCallBack(res);
+    return template;
+  } else {
+    let template = secondCallback(res);
+    return template;
+  }
+};
 module.exports = Util;
