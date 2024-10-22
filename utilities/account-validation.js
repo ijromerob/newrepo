@@ -121,7 +121,7 @@ validate.infoRules = () => {
       .escape()
       .notEmpty()
       .isEmail()
-      .normalizeEmail() // refer to validator.js docs
+      .normalizeEmail()
       .withMessage('A valid email is required.'),
     body('account_firstname')
       .trim()
@@ -166,7 +166,9 @@ validate.checkInfo = async (req, res, next) => {
       account_lastname,
       account_firstname,
     });
+    return;
   }
+  next();
 };
 validate.checkPassword = async (req, res, next) => {
   const { account_id } = req.body;
@@ -182,6 +184,8 @@ validate.checkPassword = async (req, res, next) => {
       nav,
       account_id,
     });
+    return;
   }
+  next();
 };
 module.exports = validate;

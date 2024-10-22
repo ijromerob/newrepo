@@ -69,7 +69,7 @@ async function updateAccountInfo(
     ]);
     return data.rows[0];
   } catch (error) {
-    return error.message;
+    throw error.message;
   }
 }
 

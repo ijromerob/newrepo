@@ -53,6 +53,7 @@ router.post(
   '/edit',
   regValidate.infoRules(),
   regValidate.checkInfo,
+  utilities.handleErrors(utilities.checkEmailUpdate),
   utilities.handleErrors(accountController.editInfo)
 );
 
@@ -67,4 +68,5 @@ router.post(
 );
 
 router.get('/logout', utilities.handleErrors(accountController.logout));
+
 module.exports = router;

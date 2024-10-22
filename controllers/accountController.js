@@ -201,8 +201,26 @@ async function editInfo(req, res) {
       errors: null,
     });
   } else {
+    const updatedAccount = await accountModel.getAccountByEmail(account_email);
+    delete updatedAccount.account_password;
+    const accessToken = jwt.sign(
+      updatedAccount,
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: 3600 }
+    );
+
+    if (process.env.NODE_ENV === 'development') {
+      res.cookie('jwt', accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
+    } else {
+      res.cookie('jwt', accessToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 3600 * 1000,
+      });
+    }
+
     req.flash('notice', 'The account information was updated');
-    res.redirect('/edit/');
+    res.redirect('/account/');
   }
 }
 
@@ -215,9 +233,26 @@ async function editPassword(req, res) {
   let welcomeAccount = await utilities.checkLoginWelcomeAccount(res);
   const { account_id, account_password } = req.body;
 
+  let hashedPassword;
+  try {
+    hashedPassword = await bcrypt.hashSync(account_password, 10);
+  } catch (error) {
+    req.flash('notice', 'Sorry there was an error updating the password');
+    res.status(500).render('account/update', {
+      title: 'Edit Account',
+      welcomeAccount,
+      nav,
+      errors: null,
+      account_id,
+      account_firstname: res.accountData.account_firstname,
+      account_lastname: res.accountData.account_lastname,
+      account_email: res.accountData.account_email,
+    });
+  }
+
   const updatePassword = await accountModel.updatePassword(
     account_id,
-    account_password
+    hashedPassword
   );
 
   if (updatePassword) {
@@ -231,7 +266,6 @@ async function editPassword(req, res) {
       nav,
       errors: null,
       account_id,
-      account_password,
       account_firstname: res.accountData.account_firstname,
       account_lastname: res.accountData.account_lastname,
       account_email: res.accountData.account_email,

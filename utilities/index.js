@@ -1,5 +1,6 @@
 // requirements
 const invModel = require('../models/inventory-model');
+const accountModel = require('../models/account-model');
 const Util = {};
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -249,4 +250,36 @@ Util.renderAdmisnistrativeClient = (res, firstCallBack, secondCallback) => {
     return template;
   }
 };
+
+Util.checkEmailUpdate = async (res, req, next) => {
+  const cookieEmail = res.res.locals.accountData.account_email;
+  const { account_email, account_id, account_firstname, account_lastname } =
+    req.req.body;
+  const welcomeAccount = await Util.checkLoginWelcomeAccount(res.res);
+  const nav = await Util.getNav();
+  if (cookieEmail !== account_email) {
+    try {
+      const emailExists = await accountModel.checkExistingEmail(account_email);
+      if (emailExists) {
+        req.req.flash('notice', 'This email is already in use');
+        return res.res.status(400).render('account/update', {
+          title: 'Edit Account',
+          welcomeAccount,
+          nav,
+          account_id,
+          account_firstname,
+          account_lastname,
+          account_email,
+          errors: null,
+        });
+      }
+      next();
+    } catch (error) {
+      // Handle any errors that may occur while checking the email
+      throw new error.message();
+    }
+  }
+  next();
+};
+
 module.exports = Util;
