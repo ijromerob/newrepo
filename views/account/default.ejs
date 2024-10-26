@@ -9,3 +9,6 @@
 </ul>
 <% } %>
 <a href="/account/edit/">Edit Account Information</a><%-inventoryManagement %>
+<% if (locals.accountData.account_type == 'Client') { %>
+<a href="/appointment/add/">Book an appointment</a>
+<% } else { '' } %>

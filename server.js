@@ -14,12 +14,12 @@ const static = require('./routes/static');
 const baseController = require('./controllers/baseController');
 const inventoryRoute = require('./routes/inventoryRoute');
 const intentionalErrorRoute = require('./routes/intentionalErrorRoute');
+const accountRoute = require('./routes/accountRoute');
+const appointmentRoute = require('./routes/appointmentRoute');
 const session = require('express-session');
 const pool = require('./database/');
-const accountRoute = require('./routes/accountRoute');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-
 /* ***********************
  * Middleware
  * ************************/
@@ -73,6 +73,9 @@ app.use('/inv', utilities.handleErrors(inventoryRoute));
 app.use('/interror', utilities.handleErrors(intentionalErrorRoute));
 // Account route
 app.use('/account', utilities.handleErrors(accountRoute));
+
+// Appointment route
+app.use('/appointment', utilities.handleErrors(appointmentRoute));
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {

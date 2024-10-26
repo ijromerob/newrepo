@@ -1,0 +1,51 @@
+<% if (title) { %>
+<h1><%= title %></h1>
+<% } else { res.redirect('/') } %> <%- messages() %> <% if (errors) { %>
+<ul class="notice">
+  <% errors.array().forEach(error => { %>
+  <li><%= error.msg %></li>
+  <% }) %>
+</ul>
+<% } %>
+<div class="form-shape update-info">
+  <form action="/appointment/add" method="POST" id="info-update-form">
+    <label
+      >First Name<input
+        type="text"
+        disabled
+        required
+        name="account_firstname"
+        value="<%= locals.account_firstname?locals.account_firstname:locals.accountData.account_firstname  %>"
+    /></label>
+    <label
+      >Last Name<input
+        type="text"
+        disabled
+        required
+        name="account_lastname"
+        value="<%= locals.account_lastname?locals.account_lastname:locals.accountData.account_lastname  %>"
+    /></label>
+    <label
+      >Email Address<input
+        type="email"
+        disabled
+        required
+        name="account_email"
+        value="<%= locals.account_email?locals.account_email:locals.accountData.account_email %>"
+    /></label>
+    <label
+      >Appointment Date<input
+        type="date"
+        required
+        name="appointment_date"
+        value="<%= locals.appointment_date %>"
+    /></label>
+    <button type="submit">Book Appointment</button>
+    <input
+      type="hidden"
+      name="account_id"
+      value="
+      <%=locals.account_id?locals.account_id:locals.accountData.account_id%>"
+    />
+  </form>
+</div>
